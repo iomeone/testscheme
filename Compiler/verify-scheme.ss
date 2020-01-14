@@ -39,38 +39,34 @@
 		 op
 		 (errorf who "invalid op ~s" op)))
 	   
-	   (define (verify code)
+	  	(define (verify code)
 	     (match code
-		    ;; (set! Var1 (Binop Var1 int32))
+		    ;;是否符合 (set! Var1 (Binop Var1 int32))
 		    [(set! ,[var? -> v1] (,[binop? -> op] ,[var? -> v2] ,n))
 		     (guard (int32? n))
 		     (if (eqv? v1 v2)
-			 (begin (printf "1111111111111111111111111111111111111111111111111111\n")
-			;  (printf "int32?????????")
-			  `(set! ,v1 (,op ,v2 ,n)))
-			
+			 `(set! ,v1 (,op ,v2 ,n))
 			 (errorf who "invalid syntax ~s" code))]
-		    ;; (set! Var1 (Binop Var1 Var2))
+		    ;; 是否符合(set! Var1 (Binop Var1 Var2))
 		    [(set! ,[var? -> v1] (,[binop? -> op] ,[var? -> v2] ,[var? -> v3]))
 		     (if (eqv? v1 v2)
-			 (begin (printf "22222222222222222222222222222222222222222222222222\n")
-			 `(set! ,v1 (,op ,v2 ,v3)))
+			 `(set! ,v1 (,op ,v2 ,v3))
 			 (errorf who "invalid syntax ~s" code))]
-		    ;;(set! Var1 int64)
+		    ;;是否符合(set! Var1 int64)
 		    [(set! ,[var? -> v] ,n)
 		     (guard (int64? n))
-			 (begin (printf "33333333333333333333333333333333333333333333333333333 ~a\n" n)
-		     `(set! ,v ,n))]
-		    ;;(set! Var1 Var2)
+		     `(set! ,v ,n)]
+		    ;;是否符合(set! Var1 Var2)
 		    [(set! ,[var? -> v1] ,[var? -> v2])
-			(begin (printf "444444444444444444444444444444444444444444444444444444\n")
-		     `(set! ,v1 ,v2))]
+		     `(set! ,v1 ,v2)]
 		    
 		    [,x (errorf who "invalid syntax ~s" x)]))
 	   
 	   (match program
+	    ;;是否符合Program -> (begin Statement+)
 		  [(begin ,[verify -> code] ,[verify -> code*] ...)
 		   `(begin ,code ,code* ...)]
 		  [,x (errorf who "invalid program ~s" x)])
 	   )
+	   
 	 )

@@ -31,11 +31,13 @@
 	   
 	   (define (gene code) 
 	     (match code
-		    ;; (set! dst (binop dst src))
-		    
+		    ;; 生成代码 (set! dst (binop dst src))
+		    ;; 比如 (set! rax (+ rax 10))  会生成 addq $10, %rax
 		    [(set! ,dst (,op ,dst ,src))
 		     (emit (binop op) src dst)]
 
+			;;  生成代码 (set! Var1 Var2) 或者  (set! Var1 int64)
+			;; 比如 (set! rax 5) 会生成 movq $5, %rax
 		    [(set! ,dst ,src)
 		     (emit 'movq src dst)]
 		    
