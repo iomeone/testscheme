@@ -1,6 +1,6 @@
 ;; Automatically generated file -- DO NOT MODIFY
-(library (Framework GenGrammars l01-verify-scheme)
-  (export verify-grammar:l01-verify-scheme)
+(library (Framework GenGrammars l41-flatten-program)
+  (export verify-grammar:l41-flatten-program)
   (import (chezscheme) (Framework match) (Framework prims))
   (define (any . nested-bool-ls)
     (letrec ([helper (lambda (x)
@@ -10,24 +10,12 @@
                          [(pair? x) (or (helper (car x)) (helper (cdr x)))]
                          [else x]))])
       (helper nested-bool-ls)))
-  (define verify-grammar:l01-verify-scheme
+  (define verify-grammar:l41-flatten-program
     (lambda (x)
-      (define Prog
+      (define Statement
         (lambda (x)
           (match x
-            [(letrec ([,(Label -> x1) (lambda () ,(Tail -> x2))] ...)
-               ,(Tail -> x3))
-             (any x3 x2 x1)]
-            [,e (invalid-expr 'Prog e)])))
-      (define Tail
-        (lambda (x)
-          (match x
-            [(,(Triv -> x1)) (any x1)]
-            [(begin ,(Effect -> x1) ... ,(Tail -> x2)) (any x2 x1)]
-            [,e (invalid-expr 'Tail e)])))
-      (define Effect
-        (lambda (x)
-          (match x
+            [,e (guard (not [Label e])) #f]
             [(set! . ,bod)
              (and (match (cons 'set! bod)
                     [(set! ,(Var -> x1) ,(Triv -> x2)) (any x2 x1)]
@@ -37,7 +25,8 @@
                        (,(Binop -> x2) ,(Triv -> x3) ,(Triv -> x4)))
                      (any x4 x3 x2 x1)]
                     [,e (invalid-expr 'set! e)]))]
-            [,e (invalid-expr 'Effect e)])))
+            [(jump ,(Triv -> x1)) (any x1)]
+            [,e (invalid-expr 'Statement e)])))
       (define Triv
         (lambda (x)
           (match x
@@ -49,9 +38,15 @@
         (lambda (x)
           (match x
             [,e (guard (not [Reg e])) #f]
-            [,e (guard (not [FVar e])) #f]
+            [,e (guard (not [Disp e])) #f]
             [,e (invalid-expr 'Var e)])))
+      (define Prog
+        (lambda (x)
+          (match x
+            [(code ,(Statement -> x1) ... ,(Statement -> x2))
+             (any x2 x1)]
+            [,e (invalid-expr 'Prog e)])))
       (let ([res (Prog x)])
         (if res
-            (errorf 'verify-grammar:l01-verify-scheme "~a" res)
+            (errorf 'verify-grammar:l41-flatten-program "~a" res)
             x)))))

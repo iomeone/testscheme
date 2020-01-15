@@ -450,17 +450,6 @@
         x
         (with-output-to-string (lambda () (write x)))))
   (unless (string=? (stringify input-res) (stringify output-res))
-    (begin 
-     ;;debug
-     (printf "\n-----------------------------------------------------------\n")
-    ;;debug
-   (printf (stringify input-res)) 
-    ;;debug
-    (printf "\n*******\n")
-     ;;debug
-    (printf (stringify output-res))
-     ;;debug
-      (printf "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
     (raise
       (condition
         (make-error)
@@ -468,7 +457,7 @@
         (make-irritants-condition (list pass))
         (make-pass-verification-violation
           pass inv output input-res output-res)
-        (make-message-condition "~a failed verification"))))))
+        (make-message-condition "~a failed verification")))))
 
 (define display-pass-verification-violation
   (case-lambda

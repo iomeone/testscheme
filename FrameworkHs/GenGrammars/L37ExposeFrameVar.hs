@@ -2,7 +2,7 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
 
-module FrameworkHs.GenGrammars.L01VerifyScheme where
+module FrameworkHs.GenGrammars.L37ExposeFrameVar where
 
 import FrameworkHs.Prims
 import FrameworkHs.Helpers
@@ -23,7 +23,7 @@ data Triv
   | Label Label
 data Var
   = Reg Reg
-  | FVar FVar
+  | Disp Disp
 
 instance PP Prog where
   pp (Letrec l t) = (ppSexp [fromByteString "letrec",(ppSexp (map (\(l,t) -> (ppSexp [(pp l),(ppSexp [fromByteString "lambda",(ppSexp []),(pp t)])])) l)),(pp t)])
@@ -47,9 +47,9 @@ instance PP Triv where
   ppp (Label l) = (ppp l)
 instance PP Var where
   pp (Reg r) = (pp r)
-  pp (FVar f) = (pp f)
+  pp (Disp d) = (pp d)
   ppp (Reg r) = (ppp r)
-  ppp (FVar f) = (ppp f)
+  ppp (Disp d) = (ppp d)
 
 deriving instance Eq Prog
 deriving instance Read Prog

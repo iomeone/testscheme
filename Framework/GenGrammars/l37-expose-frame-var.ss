@@ -1,6 +1,6 @@
 ;; Automatically generated file -- DO NOT MODIFY
-(library (Framework GenGrammars l01-verify-scheme)
-  (export verify-grammar:l01-verify-scheme)
+(library (Framework GenGrammars l37-expose-frame-var)
+  (export verify-grammar:l37-expose-frame-var)
   (import (chezscheme) (Framework match) (Framework prims))
   (define (any . nested-bool-ls)
     (letrec ([helper (lambda (x)
@@ -10,7 +10,7 @@
                          [(pair? x) (or (helper (car x)) (helper (cdr x)))]
                          [else x]))])
       (helper nested-bool-ls)))
-  (define verify-grammar:l01-verify-scheme
+  (define verify-grammar:l37-expose-frame-var
     (lambda (x)
       (define Prog
         (lambda (x)
@@ -49,9 +49,9 @@
         (lambda (x)
           (match x
             [,e (guard (not [Reg e])) #f]
-            [,e (guard (not [FVar e])) #f]
+            [,e (guard (not [Disp e])) #f]
             [,e (invalid-expr 'Var e)])))
       (let ([res (Prog x)])
         (if res
-            (errorf 'verify-grammar:l01-verify-scheme "~a" res)
+            (errorf 'verify-grammar:l37-expose-frame-var "~a" res)
             x)))))

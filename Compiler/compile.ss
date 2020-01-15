@@ -1,6 +1,6 @@
 (library (Compiler compile)
-  (export p423-compile)
-  (import 
+  (export p423-compile p423-step)
+  (import
     ;; Load Chez Scheme primitives:
     (chezscheme)
     ;; Load provided compiler framework:
@@ -8,26 +8,27 @@
     (Framework wrappers)
     (Framework match)
     (Framework helpers)
-    ;; Load your passes from the file you wrote them in. 
-    ;; If that file is called passes.ss, it would be
+    ;; Load your passes from the files you wrote them in:
     (Compiler verify-scheme)
+    (Compiler expose-frame-var)
+    (Compiler flatten-program)
     (Compiler generate-x86-64))
 
-;; Given a thunk that generates assembly code, this will compile the 
+;; Given a thunk that generates assembly code, this will compile the
 ;; resulting assembly code and output it to a file named t.s
 (define (assemble thunk)
   (with-output-to-file "t.s"
-    thunk 
+    thunk
     'replace)
-  (unless (zero? (system "gcc -m64 -o t t.s Framework/runtime.c"))
+  (unless (zero? (system "cc -m64 -o t t.s Framework/runtime.c"))
     (error 'assemble "assembly failed"))
-    "t.exe")
+  ;; By convention, return the command which will run the code:
+  "./t")
 
-;; Defines the compiler
-(define-compiler (p423-compile p423-compile-passes pass->wrapper)
+(define-compiler (p423-compile p423-step pass->wrapper)
   (verify-scheme)
-  (generate-x86-64 assemble))
-
-;; See the drivers.ss file for other options when defining a compiler
-
-) ;; End library
+  (expose-frame-var)
+  (flatten-program)
+  (generate-x86-64 assemble)
+)
+)
