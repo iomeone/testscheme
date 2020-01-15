@@ -20,10 +20,10 @@
   (with-output-to-file "t.s"
     thunk
     'replace)
-  (unless (zero? (system "cc -m64 -o t t.s Framework/runtime.c"))
+  (unless (zero? (system "gcc -m64 -o t t.s Framework/runtime.c"))
     (error 'assemble "assembly failed"))
   ;; By convention, return the command which will run the code:
-  "./t")
+  "t.exe")
 
 (define-compiler (p423-compile p423-step pass->wrapper)
   (verify-scheme)

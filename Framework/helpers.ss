@@ -869,8 +869,8 @@
        (emit 'pushq 'r13)
        (emit 'pushq 'r14)
        (emit 'pushq 'r15)
-       (emit 'movq 'rdi frame-pointer-register)
-       (emit 'movq 'rsi allocation-pointer-register)
+       (emit 'movq 'rcx frame-pointer-register)
+       (emit 'movq 'rdx allocation-pointer-register)
        (emit 'leaq "_scheme_exit(%rip)" return-address-register)
        code code* ...
        (emit-label "_scheme_exit")

@@ -244,29 +244,6 @@
      (set! rax (* rax rbx))
      (r15)))
 
- ;; some tests dealing with overflow
- (letrec ()
-   (begin 
-     (set! rax -9223372036854775808)
-     (set! rax (- rax 5))
-     (r15)))
- (letrec ()
-   (begin
-     (set! rax 9223372036854775807)
-     (set! rax (+ rax 5))
-     (r15)))
- (letrec ()
-   (begin 
-     (set! rax 1000000000000000000)
-     (set! rax (* rax rax))
-     (r15)))
- (letrec ()
-   (begin
-     (set! rax 1000000000000000000) 
-     (set! rbx -1)
-     (set! rbx (* rbx rax))
-     (set! rax (* rax rbx))
-     (r15)))
 
  ;; Factorial 5 - the long way.
  (letrec ()

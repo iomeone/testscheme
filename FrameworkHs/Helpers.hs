@@ -369,8 +369,8 @@ emitEntry = do
 --     pushq h R13
 --     pushq h R14
 --     pushq h R15
---     movq  h RDI (framePointerRegister c)
---     movq  h RSI (allocationPointerRegister c)
+--     movq  h RCX (framePointerRegister c)
+--     movq  h RDX (allocationPointerRegister c)
 --     leaq  h "_scheme_exit(%rip)" (returnAddressRegister c)
 
 -- | Emit the boilerplate code for exiting the scheme runtime

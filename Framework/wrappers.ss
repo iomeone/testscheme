@@ -154,9 +154,25 @@
 (define (generate-x86-64/wrapper program)
   (let-values ([(out in err pid)
                 (open-process-ports
-                  (format "exec '~a'" program)
+                  (format "~a" program)
                   (buffer-mode block)
                   (native-transcoder))])
-    (read in)))
+         
+     (begin 
+     ;;debug
+     ;(printf "generate-x86-64/wrapper\n")
+     ;;debug
+     ;(display  (format "~a" program))
+     ;;debug
+     ;(printf "\nend of generate-x86-64/wrapper\n")
+   
+      
+        
+      (read in)
+     
+     )
+    ;
+    
+    ))
 
 )
